@@ -1,0 +1,99 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+  
+    tools:context=".QitaActivity2" 
+    android:background="@drawable/shupingbg2"
+    android:id="@+id/qitagongneng"
+    >
+      <LinearLayout 
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:orientation="vertical"
+      >
+	<TextView
+	      android:layout_width="fill_parent"
+	      android:layout_height="wrap_content"
+	   android:text="@string/btn_checkpriv"
+	     
+	      android:layout_gravity="center_vertical"
+	      android:id="@+id/title"
+	      android:textSize="@dimen/textsize3"
+          android:textColor="#02536e"
+	      
+	        />
+	   
+	     <TextView
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	      android:text="@string/label_inputdigits"
+	      android:textSize="@dimen/textsize3"
+	      android:id="@+id/label_inputdigits"
+	      android:textColor="@android:color/white" 
+	     
+	      />
+	      <EditText
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	       android:textSize="@dimen/textsize3"
+	      android:background="@drawable/bg_edittext"  
+	      android:id="@+id/privkey"
+	      android:gravity="top"
+	     android:numeric="integer"
+        android:maxLength="77"
+	      
+	        />
+	     <LinearLayout 
+	      android:layout_width="match_parent"
+	      android:layout_height="wrap_content"
+	      android:orientation="horizontal"
+	      android:gravity="center_horizontal"
+	     
+	          >
+	     
+		     <Button 
+		      android:layout_width="match_parent"
+		      android:layout_height="match_parent"
+		      android:id="@+id/btn_1"
+		      android:text="@string/btn_checkpriv"  
+		       android:textSize="@dimen/textsize"
+              android:background="@drawable/button_bg"
+              android:paddingBottom="3px"
+              android:textColor="@android:color/white" 	
+		    
+		         />
+		   
+		   </LinearLayout>
+	         <TextView
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	      android:text="@string/label_derivedaddress"
+	        android:id="@+id/label_derivedaddress"
+	      android:textSize="@dimen/textsize3"
+	      android:textColor="@android:color/white" 
+	      
+	      />
+	  
+	      <LinearLayout 
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	      android:orientation="horizontal"
+	          >
+	          
+	     <EditText 
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:id="@+id/address"	       
+	         android:textSize="@dimen/textsize3"
+	         android:background="@drawable/bg_edittext" 
+	        
+	         />    
+	             
+	          
+	      </LinearLayout>
+
+		    
+    </LinearLayout>
+
+</FrameLayout>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_hbsc">Safety Check Tool</string>
+    <string name="btn_intro">Introductions</string>
+    <string name="btn_checkqr">Check QR Code</string>
+    <string name="btn_checkpriv">Check Priv.Key</string>
+    <string name="btn_checkbackup">Check Backup file</string>
+        <string name="btn_confirm">Confirm</string>
+    <string name="app_name">Hardbit Safety Check Tool</string>
+    <string name="title_scanqr">Scan QR code</string>
+    <string name="text_intro">This software is an open-source safety check tool to prove the safety of Hardbit hardware wallet. \n    Supported Hardbit version:HB01 v2.12\n    There are 3 check items:\n    1 Check QR Code\n    Check if there\'s any suspitious information leakage in the QR code sent from Hardbit.\n    2 Check Private Key\n    If the private key is manually created, you can input the 77 digits that was used to create this private key,and this tool will show you the address derived from these digits.Check if this address matches with the one in Hardbit.\n    3 Check Backup File.\n    The function is to choose a backup file, derive an address with the private key decrypted from the input password and check if it matches with the address.\n    Copyright:Harbit information technology co.ltd 2014 \n    Apache license</string>
+    <string name="label_inputdigits">Please input account digits(77)</string>
+   <string name="label_derivedaddress">Derived address:</string>
+   <string name="info_lessdigits">Please input 77 digits</string> 
+    <string name="label_inputpassword">Please input password</string>    
+    <string name="text_passwordok">Password passed</string>
+     <string name="text_passwordfail">Password failed</string>
+     <string name="text_walletfail">Can\'t recognize wallet format</string>
+     <string name="text_backupleakage">backup request:</string>
+    <string name="title_leakalert">Leakage Alert</string>
+    <string name="title_checkresult">Check Result</string>    
+    <string name="text_leakage">Suspected leakage found, </string>
+    <string name="text_backupwrong">unknown backup content</string>
+     <string name="text_unknownformat">unknown QR format</string>
+     <string name="text_wrongpagelength">page length incorrect.</string>
+     <string name="text_wronghash">page hash incorrect.</string>
+     <string name="text_wrongtail">page tail incorrect.</string>
+     <string name="text_wrongwallettype">wallet type incorrect.</string>
+     <string name="text_wrongwalletlength">wallet length incorrect.</string>
+     <string name="text_wrongupdate">wrong update format.</string>
+     <string name="text_wrongpaymentrequest">wrong collect coin request.</string>
+     <string name="text_wrongtrx">wrong transaction content.</string>
+     <string name="text_wrongcointype">wrong coin type data.</string>
+     <string name="text_updaterequest">This is an update request:</string>
+     <string name="text_paymentrequest">This is a collect coin request:</string>
+     <string name="text_cointype">Coin type:</string>
+     <string name="text_address">Address:</string>
+     <string name="text_timestamp">Timestamp:</string>
+     <string name="text_txid">Transaction ID:</string>
+     <string name="text_trx">This a transaction QR code:</string>
+     <string name="text_totalupdate">Total update.</string>
+     <string name="text_requesttime">Request time:</string>
+   <string name="info_scanpage">Please scan page：</string>
+    <string name="duplicatescan">Duplicated scan.Please turn to next page on the scanned device according to the page number</string>
+    <string name="jumpedscan">Page in between unscaned，Please turn to previous page on the scanned device according to the page number</string>
+    <string name="continuescan">Scan finished, please scan next page</string>
+     <string name="saomiao">Scan QR code</string>
+     <string name="quxiao">Cancel</string>
+    <string name="fromaddress">From address:</string>
+     <string name="toaddress">To address:</string>
+     <string name="badaddress">Wrong address format, please adjust</string>
+     <string name="amount">Payment amount：</string> 
+    <string name="scanqr">Please scan QR code</string> 
+    <string name="scanprevious">Please scan previous page</string>
+    <string name="badbackup">Wrong backup data</string>
+	<string name="badqr">Scan error, please rescan</string>
+    <string name="jixusaomiao">Please scan next page</string>
+     <string name="queding">Confirm</string>
+     <string name="selectfile">Please select file</string>
+     <string name="wrongfile">This is not a backup file</string>
+     
+ 
+       
+
+</resources>

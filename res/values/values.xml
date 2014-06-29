@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="version">1.2EN</string>
+	<string name="symbol_to">→</string>
+	<string name="symbol_from">←</string>
+	<string name="symbol_internal">⇄</string>
+
+	<string name="WIDGET_INQUERY">View balance</string>
+	<string name="widget_request">Collect Bitcoin</string>
+	<string name="widget_send">Pay Bitcoin</string>
+	<string name="widget_update">Update balance</string>
+	<string name="widget_others">Other functions</string>
+	<string name="widget_initialize">Initialize</string>
+	<string name="widget_language_setting">Set language</string>
+	<string name="widget_about">About</string>
+	<string name="widget_backup">Backup account</string>
+	<string name="widget_rebuild_data">Rebuild database</string>
+	<string name="widget_start">Start</string>
+	<string-array name="preferences_precision_values">
+		<item>8</item>
+		<item>6</item>
+		<item>4</item>
+		<item>2/3</item>
+	</string-array>
+	<string-array name="preferences_precision_labels">
+		<item>BTC, 8 digits</item>
+		<item>BTC, 6 digits</item>
+		<item>BTC, 4 digits</item>
+		<item>mBTC, 2 digits</item>
+	</string-array>
+
+</resources>
