@@ -1,5 +1,6 @@
 package com.hardbit.hbsc;
 
+import android.content.Context;
 import android.util.Log;
 import com.google.bitcoin.core.AddressFormatException;
 import com.google.bitcoin.core.Base58;
@@ -11,10 +12,29 @@ public class PaymentRequest {
 	public String amountString="";
 	public String label="";
 	public boolean isvalid=false;
-	public PaymentRequest(String request){
-		if( (request.indexOf("bitcoin:")!=-1)|(request.indexOf("Bitcoin:")!=-1)){
-		request=request.substring(8,request.length());
-		}		
+	public String coinType="BTC";
+	public PaymentRequest(String request,Context context){
+		//find out cointype
+		HbscApplication ini=(HbscApplication)context.getApplicationContext();
+		if (request.indexOf(":")!=-1){
+			boolean foundCoinType=false;
+			for (int i=0;i<ini.coinTypes.length;i++){
+				String coinName=ini.cs.find(ini.coinTypes[i]).coinName[0].toLowerCase();		
+				if( (request.toLowerCase().indexOf(coinName+":")!=-1)){
+					coinType=ini.coinTypes[i];
+					request=request.substring(1+coinName.length(),request.length());
+					foundCoinType=true;
+					break;
+				}
+			}
+			if (!foundCoinType)
+			{
+				Log.println(3, "alan","payment request:can't find cointype");
+				isvalid=false;
+				return;
+			}
+		}
+	
 		if (request.length()>35){
 			if (request.indexOf(" ")>-1){
 				address=request.substring(0, request.indexOf(" "));
@@ -33,14 +53,14 @@ public class PaymentRequest {
 					}
 					amountString=request.substring(0,i);
 					Log.println(3, "alan","request amount:"+amountString);
-					amount=HbscApplication.parseBTCAmount(amountString);
-
+					amount=((HbscApplication)context.getApplicationContext()).parseCoinAmount(coinType,amountString);
 				}
 			}
-		}else{
-			address=request;			
 		}
-		isvalid=HbscApplication.verifyTargetAddress(address);
+		else{
+			address=request;	
+		}
+		isvalid=ini.verifyTargetAddress(coinType,address);
 		if(isvalid){
 			try {
 				addressbytes=Base58.decode(address);

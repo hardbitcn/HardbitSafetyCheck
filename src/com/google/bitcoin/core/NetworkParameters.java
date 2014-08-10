@@ -67,9 +67,9 @@ public abstract class NetworkParameters implements Serializable {
     protected Block genesisBlock;
     protected BigInteger proofOfWorkLimit;
     protected int port;
-    protected long packetMagic;
-    protected int addressHeader;
-    protected int p2shHeader;
+    public long packetMagic;
+    public int addressHeader;
+    public int p2shHeader;
     protected int dumpedPrivateKeyHeader;
     protected int interval;
     protected int targetTimespan;
@@ -87,7 +87,7 @@ public abstract class NetworkParameters implements Serializable {
     protected int spendableCoinbaseDepth;
     protected int subsidyDecreaseBlockCount;
     
-    protected int[] acceptableAddressCodes;
+    public int[] acceptableAddressCodes;
     protected String[] dnsSeeds;
     protected Map<Integer, Sha256Hash> checkpoints = new HashMap<Integer, Sha256Hash>();
 
@@ -133,7 +133,7 @@ public abstract class NetworkParameters implements Serializable {
     /**
      * The maximum money to be generated
      */
-    public static final BigInteger MAX_MONEY = new BigInteger("21000000", 10).multiply(COIN);
+    public static BigInteger MAX_MONEY = new BigInteger("21000000", 10).multiply(COIN);
 
     /** Alias for TestNet3Params.get(), use that instead. */
     @Deprecated

@@ -58,4 +58,12 @@
      <string name="queding">确定</string>
      <string name="selectfile">请选择文件</string>
      <string name="wrongfile">不是备份文件格式</string>
+     <string name="title_downloading">下载中</string>
+     <string name="text_downloadcoininfo">正在下载币种信息，请稍候…</string>
+     <string name="badweb">网络连接失败,请确认网络状态后重试</string>
+               <string name="text_coininfoupdated">币种信息成功下载</string>
+                <string name="title_all_coin_balance_result">查询所有币种余额</string>
+          <string name="text_all_coin_balance_result">这是一个查询所有币种余额的二维码，地址是：</string>
+          <string name="text_wrong_address">地址格式错误.</string>
+          
 </resources>

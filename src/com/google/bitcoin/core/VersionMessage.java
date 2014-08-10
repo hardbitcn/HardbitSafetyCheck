@@ -225,6 +225,7 @@ public class VersionMessage extends Message {
      * VersionMessage does not handle cached byte array so should not have a cached checksum.
      */
     @Override
+	public
     void setChecksum(byte[] checksum) {
         throw new UnsupportedOperationException();
     }

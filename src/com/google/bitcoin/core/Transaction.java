@@ -205,7 +205,7 @@ public class Transaction extends ChildMessage implements Serializable {
      *
      * No verification is performed on this hash.
      */
-    void setHash(Sha256Hash hash) {
+    public void setHash(Sha256Hash hash) {
         this.hash = hash;
     }
 

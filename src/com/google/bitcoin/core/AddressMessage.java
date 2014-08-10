@@ -44,7 +44,7 @@ public class AddressMessage extends Message {
      * as the length will be provided as part of the header.  If unknown then set to Message.UNKNOWN_LENGTH
      * @throws ProtocolException
      */
-    AddressMessage(NetworkParameters params, byte[] payload, boolean parseLazy, boolean parseRetain, int length) throws ProtocolException {
+    public AddressMessage(NetworkParameters params, byte[] payload, boolean parseLazy, boolean parseRetain, int length) throws ProtocolException {
         super(params, payload, 0, parseLazy, parseRetain, length);
     }
 
@@ -103,6 +103,7 @@ public class AddressMessage extends Message {
      * AddressMessage cannot cache checksum in non-retain mode due to dynamic time being used.
      */
     @Override
+	public
     void setChecksum(byte[] checksum) {
         if (parseRetain)
             super.setChecksum(checksum);

@@ -12,6 +12,7 @@ import java.sql.Statement;
 import org.apache.http.util.EncodingUtils;
 
 import android.os.Environment;
+import android.util.Log;
 
 public class FileUtils {
 	String res="";   
@@ -32,6 +33,11 @@ public class FileUtils {
 	         fis.close();     
 	         return res;  
 	}  
+	public File createSDDir(String dirName) {
+		  File dir = new File(dirName);
+		  dir.mkdir();
+		  return dir;
+		 }
 	public static byte[] readSDFile(String fileName) throws IOException {  
 
         File file = new File(fileName);  
@@ -48,7 +54,28 @@ public class FileUtils {
          fis.close();     
          return buffer;  
 }  
+	 public boolean writeFileSdcard(String fileName,byte[] bytes){ 
 
+	     try{ 
+
+	      //FileOutputStream fout = openFileOutput(fileName, MODE_PRIVATE);
+
+	     FileOutputStream fout = new FileOutputStream(fileName);
+
+	      //byte [] bytes = message.getBytes(); 
+
+	      fout.write(bytes); 
+	       fout.close(); 
+	       return true;
+
+	      } 
+
+	     catch(Exception e){ 
+	    	 Log.println(3, "alan","save file error:"+e);
+	      return false;
+	     } 
+
+	 }
 	//д�ļ�
 	public void writeSDFile(String fileName, String write_str) throws IOException{  
 		    //�ļ�·��

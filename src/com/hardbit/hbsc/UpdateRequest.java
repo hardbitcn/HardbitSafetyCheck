@@ -4,7 +4,11 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import android.util.Log;
+
+import com.google.bitcoin.core.AddressFormatException;
+import com.google.bitcoin.core.Base58;
 import com.google.bitcoin.core.Utils;
+
 
 public class UpdateRequest{
 	public int cointypes=0;
@@ -25,14 +29,14 @@ public class UpdateRequest{
 		System.arraycopy(data,0,requestID,0,4);
 		cointypes=data[4];
 		if (!totalupdate){
-			if (data.length<cointypes*75){
+			if (data.length<34+cointypes*44){
 				//wrong data				
 				cointypes=0;
 				return;
 			}
 			position=5;
 			for (int i=0; i<cointypes;i++){
-				if (data.length<position+75){
+				if (data.length<position+44){
 					//wrong data
 					cointypes=0;
 					return;
@@ -50,10 +54,16 @@ public class UpdateRequest{
 						cointypes=0;
 						return;
 					}
-					singleCoinRequest.addressbytes=new byte[addresslength];
-					System.arraycopy(data, position,singleCoinRequest.addressbytes,0,addresslength);
-					position+=addresslength;
-					singleCoinRequest.address=new String(singleCoinRequest.addressbytes,"ISO-8859-1");
+					if (addresslength>0){
+						singleCoinRequest.addressbytes=new byte[addresslength];
+						System.arraycopy(data, position,singleCoinRequest.addressbytes,0,addresslength);
+						position+=addresslength;
+						singleCoinRequest.address=new String(singleCoinRequest.addressbytes,"ISO-8859-1");
+					}else{
+						addresslength=requestList.get(0).addressbytes.length;
+						singleCoinRequest.address="";
+						singleCoinRequest.addressbytes=new byte[addresslength];						
+					}
 					byte[] b=new byte[8];
 					System.arraycopy(data,position, b,0, 8);
 					position+=8;
@@ -67,14 +77,14 @@ public class UpdateRequest{
 			}
 		}
 		else{			
-			if (data.length<cointypes*35){
+			if (data.length<5+34+cointypes*4){
 				//wrong data				
 				cointypes=0;
 				return;
 			}
 			position=5;
 			for (int i=0; i<cointypes;i++){
-				if (data.length<position+35){					//wrong data					
+				if (data.length<position+4){					//wrong data					
 					cointypes=0;
 					return;
 				}
@@ -89,14 +99,21 @@ public class UpdateRequest{
 					if (data.length<position+addresslength){	//wrong data
 						cointypes=0;
 						return;
+					}	
+					if (addresslength>0){
+						singleCoinRequest.addressbytes=new byte[addresslength];
+						System.arraycopy(data, position,singleCoinRequest.addressbytes,0,addresslength);
+						position+=addresslength;
+						singleCoinRequest.address=new String(singleCoinRequest.addressbytes,"ISO-8859-1");
+					}else{
+						addresslength=requestList.get(0).addressbytes.length;
+						singleCoinRequest.address="";
+						singleCoinRequest.addressbytes=new byte[addresslength];						
 					}
-					singleCoinRequest.addressbytes=new byte[addresslength];
-					System.arraycopy(data, position,singleCoinRequest.addressbytes,0,addresslength);
-					position+=addresslength;
-					singleCoinRequest.address=new String(singleCoinRequest.addressbytes,"ISO-8859-1");									
 					requestList.add(singleCoinRequest);
 				} catch (UnsupportedEncodingException e) {		}			
 			}
 		}
 	}	
+	
 }

@@ -58,8 +58,13 @@
      <string name="queding">Confirm</string>
      <string name="selectfile">Please select file</string>
      <string name="wrongfile">This is not a backup file</string>
-     
- 
+          <string name="title_downloading">Downloading</string>
+          <string name="title_all_coin_balance_result">Check all coin balance</string>
+          <string name="text_all_coin_balance_result">This is a Check all coin balance QR code, the account address is:</string>
+          <string name="text_downloadcoininfo">Downloading coin information, please wait…</string>
+          <string name="text_wrong_address">Wrong address format.</string>
+          <string name="badweb">Network connection failed, please retry after checking network status</string>     
+<string name="text_coininfoupdated">Coin information successfully downloaded</string> 
        
 
 </resources>

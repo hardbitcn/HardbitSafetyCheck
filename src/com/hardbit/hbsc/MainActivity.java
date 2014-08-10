@@ -9,7 +9,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import com.hardbit.hbsc.R;
+import com.google.bitcoin.core.NetworkParameters;
 import com.google.bitcoin.core.Transaction;
 import com.google.bitcoin.core.Utils;
 import com.google.bitcoin.script.Script;
@@ -18,9 +24,12 @@ import com.hardbit.hbsc.MainActivity;
 import com.hardbit.hbsc.Constants;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -63,7 +72,14 @@ public class MainActivity extends Activity{
 	 int currentpage=0;
 	 int totalpage=0;
 	 byte qrCommand=0x00;
-	
+	 final String path= Environment.getExternalStorageDirectory()+"/hbsc/cbd";
+	 final String website="http://www.hardbit.cn/images/coindata/";
+	 private ProgressDialog mSaveDialog = null;  
+	byte[] fileContent=new byte[1];
+	final int Download_OK = 0;
+	protected static final int Download_fail = 1;
+	int downloadQueue=-1;
+	String[] coinTypes;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -167,9 +183,121 @@ public class MainActivity extends Activity{
 			public void onClick(View v) {
 				dialogIntro();
 			}
-		});		
+		});	
+         checkCoinData();
 	}
+	public void  checkCoinData(){
+		if (!hbsc.loadCoinData()){
+			String fileName="coinlist.cbd";
+			String url=website+fileName;
+			Log.println(3,"hbsc","url:"+url);				
+			 mSaveDialog = ProgressDialog.show(MainActivity.this, getString(R.string.title_downloading),  getString(R.string.text_downloadcoininfo), true);
+			 
+			downLoad(url, path, fileName);
+		}
+			
+	}
+	void downLoad(final String url, final String path, final String name)
+	{
+		final HttpDownloader hDownloader = new HttpDownloader();
+		new Thread(){
+			public void run() {
+				int result = hDownloader.downFile(url, path, name);
+				if(result == 0)
+				{
+					fileContent=hDownloader.fileContent;
+					Log.println(3,"hbsc","downloaderOK:"+fileContent.toString());
+					handler.sendEmptyMessage(Download_OK);
+				}
+				else
+					handler.sendEmptyMessage(Download_fail);				
+			};
+		}.start();
+	}
+	Handler handler = new Handler(){
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case Download_OK:
+				Log.println(3,"hbsc","downloadOK");
+				continueDownload();
+				break;
+			case Download_fail:
+				Log.println(3,"hbsc","downloadfail");
+				downloadQueue=-1;
+				 mSaveDialog.dismiss(); 
+				Toast.makeText(MainActivity.this, R.string.badweb, Toast.LENGTH_SHORT).show();
+				break;
+				
+			default:
+				break;
+			}
+			
+		};
+	};
+	void continueDownload(){
+		Log.println(3,"alan","continuedownload:"+downloadQueue);
+		if (downloadQueue==-1){//means downloaded coinlist
+			if (processCoinList()){//process coin list first
 
+				Log.println(3,"hbsc","coinlistdownloaded");
+				continueDownload();
+				return;
+			}
+			Toast.makeText(this, R.string.badweb, Toast.LENGTH_SHORT).show();
+			return;
+		}
+		if (downloadQueue==0){//finished
+			Log.println(3,"hbsc","downloadfinished");			
+			downloadQueue=-1;
+			 mSaveDialog.dismiss();			 
+			 Toast.makeText(this,  getString(R.string.text_coininfoupdated), Toast.LENGTH_SHORT).show();
+			 hbsc.updateCoinData();
+			return;
+		}
+		Log.println(3,"hbsc","downloading:"+downloadQueue);		
+		if (downloadQueue%2==0){
+			String fileName=coinTypes[(int)downloadQueue/2-1]+".cbd";
+			String url=website+fileName;
+			downloadQueue--;
+			downLoad(url, path, fileName);
+			return;
+		}else{
+			String fileName=coinTypes[(int)Math.ceil((double)downloadQueue/2)-1]+".png";
+			String url=website+fileName;
+			downloadQueue--;
+			downLoad(url, path, fileName);
+			return;
+		}
+				
+	}
+	public boolean processCoinList(){		
+		String httpResult="";
+		try {
+			httpResult = new String(fileContent,"UTF-8");
+		} catch (UnsupportedEncodingException e1) {	
+			Log.println(3,"hbsc","fileformaterror:"+e1);
+		}
+
+		Log.println(3,"hbsc","downloadcontent:"+httpResult);		
+		try{
+			JSONTokener jsonParser = new JSONTokener(httpResult);   		
+			JSONObject person = (JSONObject) jsonParser.nextValue();
+			String txs1 = person.getString("coinlist");	
+			
+			JSONArray arr = new JSONArray(txs1);
+			downloadQueue=arr.length()*2;
+			coinTypes=new String[arr.length()];
+			for (int i=arr.length()-1;i>=0;i--){
+				JSONObject temp = (JSONObject) arr.get(i);  
+				coinTypes[i] = temp.getString("cointype");				
+			}
+		}
+		catch (Exception e){
+			Log.println(3, "hbsc","download fail"+e);
+			return false;
+		}
+		return true;
+	}
 	@Override
 	protected Dialog onCreateDialog(int id) {//choose backup file callback
 		if(id==0){
@@ -269,6 +397,22 @@ public class MainActivity extends Activity{
 		});    	
     	builder.create().show();
     }
+protected void dialogAllCoinBalance(String address) {    	
+    	AlertDialog.Builder builder = new Builder(MainActivity.this);
+    	 
+    	 builder.setTitle(this.getString(R.string.title_all_coin_balance_result)); 
+    	 String msg=new String();
+    	 msg+=getString(R.string.text_all_coin_balance_result)+"\n";
+    	 msg+=address;    	     	 
+    	 builder.setMessage(msg);
+    	 builder.setPositiveButton(this.getString(R.string.queding), new  OnClickListener(){
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();				
+			}
+		});    	
+    	builder.create().show();
+    }
 	protected void dialogUpdateRequestOld(UpdateRequestOld request) {    	
     	AlertDialog.Builder builder = new Builder(MainActivity.this);
     	 
@@ -337,8 +481,11 @@ public class MainActivity extends Activity{
     	builder.create().show();
     }
 	public boolean receiveMultipage(byte[] fulldata){
-		byte[] tempint={0,0,fulldata[3],fulldata[4]};
-		int pagelength=HbscApplication.byteArrayToInt(tempint,0)-4;//minus the hash 4 bytes		
+		byte[] tempint={0,0,fulldata[3],fulldata[4]};		
+		int pagelength=HbscApplication.byteArrayToInt(tempint,0)-4;//minus the hash 4 bytes
+		if((pagelength>fulldata.length-9)&&(fulldata[0]==(byte)0xfa)){
+			pagelength-=40;			
+		}
 				if(fulldata[1]==1){//only one page	
 					scandatastream= new byte[pagelength];					
 					System.arraycopy(fulldata,5,scandatastream,0, pagelength);		
@@ -396,7 +543,12 @@ public class MainActivity extends Activity{
 	public boolean verifyQr(byte[]fulldata){
 		byte[] tempint={0,0,fulldata[3],fulldata[4]};
 		int pagelength=HbscApplication.byteArrayToInt(tempint,0);
-		if (pagelength>fulldata.length-5){
+		Log.println(3, "hbsc", "full data:"+Utils.bytesToHexString(fulldata));
+		Log.println(3, "hbsc", "main.verifyqr:pagelength"+pagelength);
+		if((pagelength>fulldata.length-5)&&(fulldata[0]==(byte)0xfa)){
+			pagelength-=40;			
+		}
+		if ((pagelength>fulldata.length-5)){
 			dialogLeak(getString(R.string.text_wrongpagelength));
 			return false;
 		}
@@ -407,7 +559,7 @@ public class MainActivity extends Activity{
 		byte[] shorthash2=new byte[4];
 		System.arraycopy(hash,0,shorthash1,0,4);
 		System.arraycopy(fulldata,pagelength+5-4,shorthash2,0,4);
-		Log.println(3, "hbsc", "full data:"+Utils.bytesToHexString(fulldata));
+
 		//Log.println(3, "hbsc", "calculated hash:"+Utils.bytesToHexString(shorthash1));
 		//Log.println(3, "hbsc", "original hash:"+Utils.bytesToHexString(shorthash2));
 		if (!Arrays.equals(shorthash2,shorthash1)){			
@@ -545,9 +697,28 @@ public class MainActivity extends Activity{
 			dialogUpdateRequest(updateRequest1,false);
 		}
 	}
+	public void checkAllCoinBalance(byte[] fulldata){
+		String address="";
+		if (!verifyQr(fulldata)) return;
+		if(receiveMultipage(fulldata)){
+			if(scandatastream.length<34){
+				dialogLeak(getString(R.string.text_wrongpagelength));
+				return;
+			}
+			try {
+				address=new String(scandatastream,"ISO-8859-1");
+			} catch (UnsupportedEncodingException e) {			}
+			if(!hbsc.verifyTargetAddress("BTC", address)){
+				dialogLeak(getString(R.string.text_wrong_address));
+				return; 
+			}
+			dialogAllCoinBalance(address);
+		}
+	}
 	public void checkTotalUpdate(byte[] fulldata){
 		if (!verifyQr(fulldata)) return;
 		if(receiveMultipage(fulldata)){
+			
 			if(scandatastream.length<4+3+1+35){
 				dialogLeak(getString(R.string.text_wrongpagelength));
 				return;
@@ -595,7 +766,7 @@ public class MainActivity extends Activity{
 			}else{//full transaction collected 				
 				currentpage=1;	
 				tx=new Transaction(Constants.NETWORK_PARAMETERS,qrdata);
-				if(hbsc.verifyTrx(tx)&&hbsc.verifyTrxHeader(tx,header)){
+				if(hbsc.verifyTrx(Constants.NETWORK_PARAMETERS,tx)&&hbsc.verifyTrxHeader(Constants.NETWORK_PARAMETERS,tx,header)){
 					@SuppressWarnings("deprecation")
 					String originaddress=tx.getInput(0).getScriptSig().getFromAddress(Constants.NETWORK_PARAMETERS).toString();
 					String toaddress=(new Script(tx.getOutput(0).getScriptBytes())).getToAddress(Constants.NETWORK_PARAMETERS).toString();
@@ -633,25 +804,26 @@ public class MainActivity extends Activity{
 			try {
 				coinType=new String(tempbyte,"ISO-8859-1");
 			} catch (UnsupportedEncodingException e) {}	
-			//temporary solution of single coin version
-			if (!coinType.equals("BTC")){
+					
+			if (hbsc.cs.find(coinType)==null){
 				Log.println(3, "hbsc", "wrong cointype:"+coinType);
 				dialogLeak(getString(R.string.text_wrongcointype));
 				return;
-			}
+			}			
+			NetworkParameters coinParams=hbsc.getCoinParams(coinType);
 			byte[] header=new byte[24];
 			System.arraycopy(scandatastream,3,header,0,24);
-			qrdata=new byte[scandatastream.length-3-24];//minus the length of cointype 3bytes,header-- 24bytes,hash 4bytes
+			qrdata=new byte[scandatastream.length-3-24];//minus the length of cointype 3bytes,header-- 24bytes
 			System.arraycopy(scandatastream,3+24,qrdata,0,qrdata.length);			
 			try{
-				tx=new Transaction(Constants.NETWORK_PARAMETERS,qrdata);
+				tx=new Transaction(coinParams,qrdata);
 			}
 			catch (Exception e){
-				Log.println(3, "hbsc", "can't serialize tx:"+Utils.bytesToHexString(qrdata));
+				Log.println(3, "hbsc", "can't serialize tx:"+e.toString()+Utils.bytesToHexString(qrdata));
 				dialogLeak(getString(R.string.text_wrongtrx));
 				return;
 			}
-			if(hbsc.verifyTrx(tx)&&hbsc.verifyTrxHeader(tx,header)){
+			if(hbsc.verifyTrx(coinParams,tx)&&hbsc.verifyTrxHeader(coinParams,tx,header)){
 				@SuppressWarnings("deprecation")
 				String originaddress=tx.getInput(0).getScriptSig().getFromAddress(Constants.NETWORK_PARAMETERS).toString();
 				String toaddress=(new Script(tx.getOutput(0).getScriptBytes())).getToAddress(Constants.NETWORK_PARAMETERS).toString();
@@ -681,7 +853,7 @@ public class MainActivity extends Activity{
 		return true;
 	}
 	public void checkPaymentRequest(String scanString){
-		PaymentRequest request=new PaymentRequest(scanString);
+		PaymentRequest request=new PaymentRequest(scanString,this);
 		if(!request.isvalid)	{
 			dialogLeak(getString(R.string.text_wrongpaymentrequest));
 		return;	
@@ -729,11 +901,17 @@ public class MainActivity extends Activity{
 					checkTrx(fulldata);
 					return;	
 				}
+				if (fulldata[0]==(byte)0Xcb){//transaction
+					checkAllCoinBalance(fulldata);
+					return;	
+				}
 				String scanString = bundle.getString("result");
-				if (scanString.indexOf("bitcoin:")>-1){
-					checkPaymentRequest(scanString);					
-					return;
-				}	
+				for(int i=0;i<hbsc.coinTypes.length;i++){
+					if (scanString.indexOf(hbsc.cs.find(hbsc.coinTypes[i]).coinName[0].toLowerCase())>-1){
+						checkPaymentRequest(scanString);					
+						return;
+					}	
+				}
 				dialogLeak(getString(R.string.text_unknownformat));				
 			}		        			
 		}	

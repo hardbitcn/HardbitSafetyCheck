@@ -150,12 +150,13 @@ public final class R {
         public static final int realm_properties=0x7f040001;
     }
     public static final class string {
-        public static final int WIDGET_INQUERY=0x7f080042;
+        public static final int WIDGET_INQUERY=0x7f080049;
         public static final int amount=0x7f080031;
         public static final int app_name=0x7f080006;
         public static final int badaddress=0x7f080030;
         public static final int badbackup=0x7f080034;
         public static final int badqr=0x7f080035;
+        public static final int badweb=0x7f08003f;
         public static final int btn_checkbackup=0x7f080004;
         public static final int btn_checkpriv=0x7f080003;
         public static final int btn_checkqr=0x7f080002;
@@ -164,10 +165,10 @@ public final class R {
         public static final int continuescan=0x7f08002b;
         public static final int duplicatescan=0x7f080029;
         public static final int fromaddress=0x7f08002e;
-        public static final int help_request_coins=0x7f08003b;
-        public static final int help_safety=0x7f08003d;
-        public static final int help_send_coins=0x7f08003c;
-        public static final int help_wallet=0x7f08003a;
+        public static final int help_request_coins=0x7f080042;
+        public static final int help_safety=0x7f080044;
+        public static final int help_send_coins=0x7f080043;
+        public static final int help_wallet=0x7f080041;
         public static final int info_lessdigits=0x7f08000b;
         public static final int info_scanpage=0x7f080028;
         public static final int jixusaomiao=0x7f080036;
@@ -181,13 +182,16 @@ public final class R {
         public static final int scanprevious=0x7f080033;
         public static final int scanqr=0x7f080032;
         public static final int selectfile=0x7f080038;
-        public static final int symbol_from=0x7f080040;
-        public static final int symbol_internal=0x7f080041;
-        public static final int symbol_to=0x7f08003f;
+        public static final int symbol_from=0x7f080047;
+        public static final int symbol_internal=0x7f080048;
+        public static final int symbol_to=0x7f080046;
         public static final int text_address=0x7f080022;
+        public static final int text_all_coin_balance_result=0x7f08003c;
         public static final int text_backupleakage=0x7f080010;
         public static final int text_backupwrong=0x7f080014;
+        public static final int text_coininfoupdated=0x7f080040;
         public static final int text_cointype=0x7f080021;
+        public static final int text_downloadcoininfo=0x7f08003d;
         public static final int text_intro=0x7f080008;
         public static final int text_leakage=0x7f080013;
         public static final int text_passwordfail=0x7f08000e;
@@ -201,6 +205,7 @@ public final class R {
         public static final int text_unknownformat=0x7f080015;
         public static final int text_updaterequest=0x7f08001f;
         public static final int text_walletfail=0x7f08000f;
+        public static final int text_wrong_address=0x7f08003e;
         public static final int text_wrongcointype=0x7f08001e;
         public static final int text_wronghash=0x7f080017;
         public static final int text_wrongpagelength=0x7f080016;
@@ -210,22 +215,24 @@ public final class R {
         public static final int text_wrongupdate=0x7f08001b;
         public static final int text_wrongwalletlength=0x7f08001a;
         public static final int text_wrongwallettype=0x7f080019;
+        public static final int title_all_coin_balance_result=0x7f08003b;
         public static final int title_checkresult=0x7f080012;
+        public static final int title_downloading=0x7f08003a;
         public static final int title_hbsc=0x7f080000;
         public static final int title_leakalert=0x7f080011;
         public static final int title_scanqr=0x7f080007;
         public static final int toaddress=0x7f08002f;
-        public static final int version=0x7f08003e;
-        public static final int widget_about=0x7f080049;
-        public static final int widget_backup=0x7f08004a;
-        public static final int widget_initialize=0x7f080047;
-        public static final int widget_language_setting=0x7f080048;
-        public static final int widget_others=0x7f080046;
-        public static final int widget_rebuild_data=0x7f08004b;
-        public static final int widget_request=0x7f080043;
-        public static final int widget_send=0x7f080044;
-        public static final int widget_start=0x7f08004c;
-        public static final int widget_update=0x7f080045;
+        public static final int version=0x7f080045;
+        public static final int widget_about=0x7f080050;
+        public static final int widget_backup=0x7f080051;
+        public static final int widget_initialize=0x7f08004e;
+        public static final int widget_language_setting=0x7f08004f;
+        public static final int widget_others=0x7f08004d;
+        public static final int widget_rebuild_data=0x7f080052;
+        public static final int widget_request=0x7f08004a;
+        public static final int widget_send=0x7f08004b;
+        public static final int widget_start=0x7f080053;
+        public static final int widget_update=0x7f08004c;
         public static final int wrongfile=0x7f080039;
     }
     public static final class style {
